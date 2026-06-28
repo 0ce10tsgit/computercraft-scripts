@@ -1,0 +1,17 @@
+{
+    "name": "example",
+    "host": "your-host.example.com",
+    "protocol": "sftp",
+    "port": 2222,
+    "username": "your-username",
+    "password": "your-password",
+    "remotePath": "/path/to/remote",
+    "uploadOnSave": true,
+    "useTempFile": false,
+    "openSsh": false,
+    "ignore": [
+        ".git",
+        ".vscode",
+        ".DS_Store"
+    ]
+}
