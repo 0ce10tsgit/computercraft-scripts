@@ -1,13 +1,31 @@
 # GitHub Copilot Instructions
 
+> Do not review or suggest changes to files in any `res/` folder (e.g. `pixelui.lua`, `shrekbox.lua`). These are third-party dependencies and are not owned by this project.
+>
+> Do review all files in `devops/`, including PowerShell scripts (`.ps1`), for correctness, error handling, and safe SFTP deployment practices.
+
 ## Project context
 ComputerCraft (CC:Tweaked) scripts for a Minecraft base running NeoForge 1.21.1 with the Create mod. Code runs on in game computers with a Lua 5.2 runtime not standard like desaktop Lua.
 
 ## Workflow
-- `devops/` is the signle source of truth. Scripts are deployed to in-game computers via SFTP (Posh-SSH).
-- `devops/relay/relay.lua` are copied to relay computers (1, 2, 3…) as `startup/startup.lua`
-- `devops/tracker/startup.lua` + `devops/tracker/res/` → are for the main computers(source and dependeenceis)
-- Numbered folders (`0/`, `1/`, `2/`…) are git-ignored; they are SFTP-synced live copies, not source.
+`devops/` is the single source of truth. Numbered computer folders (`0/`, `1/`, `2/`…) are git-ignored live copies — do not treat them as source.
+
+### How the server file system works
+CC:Tweaked stores each in-game computer's files under `/world/computercraft/computer/<id>/` on the Minecraft server. The project's SFTP remote path is set to that directory, so the local project root maps directly to it:
+
+- Local `0/startup/startup.lua` → server `/world/computercraft/computer/0/startup/startup.lua`
+- Local `1/startup/startup.lua` → server `/world/computercraft/computer/1/startup/startup.lua`
+
+Each computer boots by running `/startup/startup.lua` automatically on start.
+
+### SFTP sync (VS Code extension)
+The Natizyskunk SFTP extension is configured in `.vscode/sftp.json`. With `uploadOnSave: true`, saving any file outside the ignore list pushes it to the server immediately. `devops/` is in the ignore list it is never auto-uploaded and exists for developement purposes only.
+
+### Deploying via devops scripts
+PowerShell scripts in `devops/` handle deployment manually:
+1. Copy the master script from `devops/<role>/` into the relevant numbered computer folder(s) locally.
+2. Upload via SFTP using Posh-SSH (`New-SFTPSession`, `Set-SFTPItem`), reading credentials from `.vscode/sftp.json`.
+3. Reboot the target computer in-game to apply.
 
 ## CC:Tweaked specifics
 - Terminal: 51×19 chars on a normal computer, 16 colours + mouse events on advanced.
