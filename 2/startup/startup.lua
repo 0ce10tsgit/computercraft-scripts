@@ -27,7 +27,7 @@ local screen = {
     BANG,                                                    --  6
     SEP,                                                     --  7
     row(""),                                                 --  8
-    row("Relay Computer : " .. os.getComputerID()),            --  9
+    row("Relay ID : " .. os.getComputerID()),          --  9
     row("Name: " .. label),                                  -- 10
     row(""),                                                 -- 11
     row("closing this loses telemetry not auto restored"),   -- 12
