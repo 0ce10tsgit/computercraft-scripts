@@ -5,7 +5,7 @@
 $ErrorActionPreference = "Stop"
 
 $source  = Join-Path $PSScriptRoot "relay.lua"
-$root    = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent  # devops/relay -> devops -> project root
+$root    = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent  # devops/farm_relay -> devops -> project root
 $targets = @("1", "2", "3")
 
 # ── Local copy ────────────────────────────────────────────────────────────────
